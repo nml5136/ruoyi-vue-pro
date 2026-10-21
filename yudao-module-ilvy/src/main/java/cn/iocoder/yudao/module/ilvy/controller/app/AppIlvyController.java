@@ -33,13 +33,22 @@ public class AppIlvyController {
   @GetMapping("/places")
   @PermitAll
   public CommonResult<List<JsonNode>> places(@Valid Query q) {
-    return CommonResult.success(service.search(q));
+    return CommonResult.success(
+        Boolean.TRUE.equals(q.getFavoriteOnly())
+            ? service.searchSaved(user(), q)
+            : service.search(q));
   }
 
   @GetMapping("/places/{id}")
   @PermitAll
   public CommonResult<JsonNode> place(@PathVariable String id) {
     return CommonResult.success(service.place(id));
+  }
+
+  @GetMapping("/collections")
+  @PermitAll
+  public CommonResult<Map<String, List<CatalogCollection>>> collections() {
+    return CommonResult.success(service.collections());
   }
 
   @GetMapping("/capabilities")

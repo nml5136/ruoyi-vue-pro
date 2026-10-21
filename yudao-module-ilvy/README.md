@@ -48,3 +48,7 @@ java -jar target/yudao-module-ilvy-2026.06-jdk8-SNAPSHOT-local.jar --spring.prof
 见 [资料交接契约](docs/资料交接契约.md) 与 `schema/place-evidence-v1.schema.json`。无采集、自动导入、发布或 Grok 联系动作。schema 暂为交接约定，正式导入校验及运营审核流程尚未实现。
 
 下一阶段：接入完整 yudao-server/会员与租户链路，隔离 MySQL/Redis 验收；完善目录分页/索引与分字段事实有效期；引入已核验且获许可的真实景点资料；联调外部能力与微信开发者工具/真机。
+
+## 区域/专题与筛选补齐
+
+`GET /app-api/ilvy/collections` 从现有目录聚合区域父子关系和编辑主题，不新增未经核实的地区事实。`types`、`themes`、`levels` 接受最多 10 个值，维度内 OR、跨维度 AND；原单值参数继续兼容。`favoriteOnly=true` 必须具备会员身份，只按服务器中的本会员收藏筛选，客户端不能指定收藏所有者。

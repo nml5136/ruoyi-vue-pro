@@ -170,4 +170,63 @@ class IlvyApiTest {
     assertEquals(400, call("/places?maxDrive=-1", HttpMethod.GET, null, null).getStatusCodeValue());
     assertEquals(404, call("/places/missing", HttpMethod.GET, null, null).getStatusCodeValue());
   }
+
+  @Test
+  void collectionsAreAggregatedAndUnknownFactsStayUnknown() {
+    JsonNode data = call("/collections", HttpMethod.GET, null, null).getBody().path("data");
+    java.util.Set<String> ids = new java.util.HashSet<>();
+    for (JsonNode d : data.path("destinations")) ids.add(d.path("id").asText());
+    int total = 0;
+    for (JsonNode d : data.path("destinations")) {
+      if (d.path("kind").asText().equals("province")) total += d.path("placeCount").asInt();
+      if (!d.path("parentId").isNull()) assertTrue(ids.contains(d.path("parentId").asText()));
+      assertTrue(d.path("sampleOnly").asBoolean());
+      assertTrue(d.path("season").isNull());
+      assertTrue(d.path("recommendedDays").isNull());
+      assertEquals("pending", d.path("reviewStatus").asText());
+      assertEquals(d.path("placeIds").size(), d.path("placeCount").asInt());
+    }
+    assertEquals(4, total);
+    assertEquals(6, data.path("topics").size());
+    for (JsonNode t : data.path("topics"))
+      if (t.path("theme").asText().equals("夜游")) assertEquals(0, t.path("placeCount").asInt());
+  }
+
+  @Test
+  void multipleQueryFacetsBindAndValidate() {
+    assertEquals(
+        2, call("/places?types=公园,营地", HttpMethod.GET, null, null).getBody().path("data").size());
+    assertEquals(
+        1,
+        call("/places?types=公园,营地&themes=古建,亲子", HttpMethod.GET, null, null)
+            .getBody()
+            .path("data")
+            .size());
+    assertEquals(
+        0, call("/places?levels=3A,4A", HttpMethod.GET, null, null).getBody().path("data").size());
+    assertEquals(
+        400,
+        call("/places?types=a,b,c,d,e,f,g,h,i,j,k", HttpMethod.GET, null, null)
+            .getStatusCodeValue());
+  }
+
+  @Test
+  void favoriteOnlyScopeUsesAuthenticatedOwnerRatherThanClientIds() {
+    assertEquals(
+        401, call("/places?favoriteOnly=true", HttpMethod.GET, null, null).getStatusCodeValue());
+    String a = session(), b = session();
+    ObjectNode s = state(a);
+    ((ArrayNode) s.path("favorites"))
+        .addObject()
+        .put("placeId", "forest-park")
+        .put("group", "仅我想去");
+    assertEquals(200, call("/state", HttpMethod.PUT, a, s).getStatusCodeValue());
+    JsonNode mine =
+        call("/places?favoriteOnly=true", HttpMethod.GET, a, null).getBody().path("data");
+    assertEquals(1, mine.size());
+    assertEquals("forest-park", mine.get(0).path("id").asText());
+    assertEquals(
+        0,
+        call("/places?favoriteOnly=true", HttpMethod.GET, b, null).getBody().path("data").size());
+  }
 }

@@ -44,4 +44,32 @@ class IlvyFilterTest {
     q.setTheme("露营");
     assertFalse(IlvyService.matches(p, q));
   }
+
+  @Test
+  void multiFacetsAreOrWithinAndAcrossDimensions() throws Exception {
+    JsonNode p =
+        mapper.readTree(
+            "{\"type\":\"公园\",\"types\":[\"公园\",\"观景点\"],\"themes\":[\"亲子\"],\"level\":\"待核实\"}");
+    Query q = new Query();
+    q.setTypes(java.util.Arrays.asList("营地", "观景点"));
+    q.setThemes(java.util.Arrays.asList("古建", "亲子"));
+    assertTrue(IlvyService.matches(p, q));
+    q.setLevels(java.util.Arrays.asList("3A", "4A"));
+    assertFalse(IlvyService.matches(p, q));
+    q.setLevels(java.util.Arrays.asList("待核实", "5A"));
+    assertTrue(IlvyService.matches(p, q));
+    q.setCity("西安");
+    assertFalse(IlvyService.matches(p, q));
+  }
+
+  @Test
+  void legacyFacetAndMultipleValuesRemainCompatible() throws Exception {
+    JsonNode p = mapper.readTree("{\"type\":\"公园\",\"themes\":[\"亲子\"]}");
+    Query q = new Query();
+    q.setType("公园");
+    q.setTypes(java.util.Arrays.asList("营地"));
+    q.setTheme("古建");
+    q.setThemes(java.util.Arrays.asList("亲子"));
+    assertTrue(IlvyService.matches(p, q));
+  }
 }

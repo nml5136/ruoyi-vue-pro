@@ -14,11 +14,23 @@ public class IlvyModels {
     @Size(max = 30)
     private String province = "", city = "", district = "", type = "", theme = "", level = "";
 
+    @NotNull
+    @Size(max = 10)
+    private List<@NotBlank @Size(max = 30) String> types = new ArrayList<>();
+
+    @NotNull
+    @Size(max = 10)
+    private List<@NotBlank @Size(max = 30) String> themes = new ArrayList<>();
+
+    @NotNull
+    @Size(max = 10)
+    private List<@NotBlank @Size(max = 30) String> levels = new ArrayList<>();
+
     @Min(1)
     @Max(1440)
     private Integer maxDrive;
 
-    private Boolean free, stroller, booking;
+    private Boolean free, stroller, booking, favoriteOnly;
 
     @Min(0)
     @Max(10000)
@@ -31,6 +43,28 @@ public class IlvyModels {
     @Min(1)
     @Max(72)
     private Integer maxStay;
+  }
+
+  @Data
+  @lombok.experimental.Accessors(chain = true)
+  public static class CatalogCollection {
+    private String id,
+        parentId,
+        kind,
+        name,
+        province = "",
+        city = "",
+        district = "",
+        theme = "",
+        title,
+        intro,
+        season,
+        reviewStatus = "pending",
+        source;
+    private Integer recommendedDays;
+    private int placeCount;
+    private boolean sampleOnly;
+    private List<String> placeIds = new ArrayList<>(), themes = new ArrayList<>();
   }
 
   @Data

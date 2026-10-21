@@ -50,7 +50,11 @@ public class LocalSecurity {
         .authorizeRequests()
         .antMatchers(HttpMethod.OPTIONS, "/**")
         .permitAll()
-        .antMatchers(HttpMethod.GET, "/app-api/ilvy/places/**", "/app-api/ilvy/capabilities")
+        .antMatchers(
+            HttpMethod.GET,
+            "/app-api/ilvy/places/**",
+            "/app-api/ilvy/capabilities",
+            "/app-api/ilvy/collections")
         .permitAll()
         .antMatchers(HttpMethod.POST, "/app-api/ilvy/local-session")
         .permitAll()
