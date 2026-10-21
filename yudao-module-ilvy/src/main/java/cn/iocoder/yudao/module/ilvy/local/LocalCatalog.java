@@ -8,6 +8,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+@org.springframework.core.annotation.Order(10)
 @Component
 @Profile("ilvy-local")
 public class LocalCatalog implements ApplicationRunner {

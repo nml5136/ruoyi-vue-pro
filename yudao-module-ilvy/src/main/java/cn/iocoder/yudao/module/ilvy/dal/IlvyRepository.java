@@ -32,6 +32,15 @@ public class IlvyRepository {
         (rs, n) -> read(rs.getString(1), JsonNode.class));
   }
 
+  public JsonNode place(String id) {
+    List<JsonNode> rows =
+        jdbc.query(
+            "SELECT payload FROM ilvy_place WHERE id=?",
+            (r, n) -> read(r.getString(1), JsonNode.class),
+            id);
+    return rows.isEmpty() ? null : rows.get(0);
+  }
+
   public State state(long user) {
     List<State> rows =
         jdbc.query(
@@ -78,11 +87,12 @@ public class IlvyRepository {
   }
 
   public List<Map<String, Object>> feedback(long user) {
-    return jdbc.queryForList(
-        "SELECT id,place_id,category,description,status,created_at FROM ilvy_feedback WHERE"
-            + " user_id=? AND tenant_id=? AND user_type=1 ORDER BY created_at DESC",
-        user,
-        tenant());
+    return lower(
+        jdbc.queryForList(
+            "SELECT id,place_id,category,description,status,created_at FROM ilvy_feedback WHERE"
+                + " user_id=? AND tenant_id=? AND user_type=1 ORDER BY created_at DESC",
+            user,
+            tenant()));
   }
 
   public void assertOwner(long user) {
@@ -111,10 +121,12 @@ public class IlvyRepository {
   public EvidenceRecord evidence(long user, String id) {
     List<EvidenceRecord> rows =
         jdbc.query(
-            "SELECT id,content_type,file_path,file_size,feedback_id FROM ilvy_feedback_evidence"
-                + " WHERE id=? AND user_id=? AND tenant_id=? AND user_type=1",
+            "SELECT id,content_type,file_path,file_size,feedback_id,deleted_at FROM"
+                + " ilvy_feedback_evidence WHERE id=? AND user_id=? AND tenant_id=? AND"
+                + " user_type=1",
             (rs, n) ->
                 new EvidenceRecord()
+                    .setDeleted(rs.getTimestamp("deleted_at") != null)
                     .setId(rs.getString("id"))
                     .setContentType(rs.getString("content_type"))
                     .setFilePath(rs.getString("file_path"))
@@ -129,7 +141,7 @@ public class IlvyRepository {
   public int linkEvidence(long user, String id, String feedback) {
     return jdbc.update(
         "UPDATE ilvy_feedback_evidence SET feedback_id=? WHERE id=? AND user_id=? AND tenant_id=?"
-            + " AND user_type=1 AND feedback_id IS NULL",
+            + " AND user_type=1 AND feedback_id IS NULL AND deleted_at IS NULL",
         feedback,
         id,
         user,
@@ -138,21 +150,89 @@ public class IlvyRepository {
 
   public int removeUnsubmittedEvidence(long user, String id) {
     return jdbc.update(
-        "DELETE FROM ilvy_feedback_evidence WHERE id=? AND user_id=? AND tenant_id=? AND"
-            + " user_type=1 AND feedback_id IS NULL",
+        "UPDATE ilvy_feedback_evidence SET deleted_at=CURRENT_TIMESTAMP WHERE id=? AND user_id=?"
+            + " AND tenant_id=? AND user_type=1 AND feedback_id IS NULL AND deleted_at IS NULL",
         id,
         user,
         tenant());
   }
 
+  public int detachEvidence(long user, String id, String feedback) {
+    return jdbc.update(
+        "UPDATE ilvy_feedback_evidence SET deleted_at=CURRENT_TIMESTAMP WHERE id=? AND"
+            + " feedback_id=? AND user_id=? AND tenant_id=? AND user_type=1 AND deleted_at IS NULL",
+        id,
+        feedback,
+        user,
+        tenant());
+  }
+
+  public List<Map<String, Object>> expiredEvidence(long user) {
+    return lower(
+        jdbc.queryForList(
+            "SELECT id,content_type,file_size,created_at FROM ilvy_feedback_evidence WHERE"
+                + " user_id=? AND tenant_id=? AND user_type=1 AND feedback_id IS NULL AND"
+                + " deleted_at IS NULL AND created_at<? ORDER BY created_at,id LIMIT 50",
+            user,
+            tenant(),
+            java.sql.Timestamp.from(
+                java.time.Instant.now().minus(24, java.time.temporal.ChronoUnit.HOURS))));
+  }
+
+  public int expireEvidence(long user, String id) {
+    return jdbc.update(
+        "UPDATE ilvy_feedback_evidence SET deleted_at=CURRENT_TIMESTAMP WHERE id=? AND user_id=?"
+            + " AND tenant_id=? AND user_type=1 AND feedback_id IS NULL AND deleted_at IS NULL AND"
+            + " created_at<?",
+        id,
+        user,
+        tenant(),
+        java.sql.Timestamp.from(
+            java.time.Instant.now().minus(24, java.time.temporal.ChronoUnit.HOURS)));
+  }
+
+  public List<Map<String, Object>> purgeCandidates(int limit) {
+    return jdbc.queryForList(
+        "SELECT id,file_path FROM ilvy_feedback_evidence WHERE deleted_at<? AND purged_at IS NULL"
+            + " ORDER BY deleted_at,id LIMIT ?",
+        java.sql.Timestamp.from(
+            java.time.Instant.now().minus(7, java.time.temporal.ChronoUnit.DAYS)),
+        limit);
+  }
+
+  public void recordPurge(String id, String error) {
+    if (error == null)
+      jdbc.update(
+          "UPDATE ilvy_feedback_evidence SET"
+              + " purged_at=CURRENT_TIMESTAMP,purge_attempts=purge_attempts+1,last_purge_error=NULL"
+              + " WHERE id=? AND purged_at IS NULL",
+          id);
+    else
+      jdbc.update(
+          "UPDATE ilvy_feedback_evidence SET purge_attempts=purge_attempts+1,last_purge_error=?"
+              + " WHERE id=? AND purged_at IS NULL",
+          error,
+          id);
+  }
+
   public List<String> evidenceIds(long user, String feedback) {
     return jdbc.query(
         "SELECT id FROM ilvy_feedback_evidence WHERE feedback_id=? AND user_id=? AND tenant_id=?"
-            + " AND user_type=1 ORDER BY created_at,id",
+            + " AND user_type=1 AND deleted_at IS NULL ORDER BY created_at,id",
         (rs, n) -> rs.getString(1),
         feedback,
         user,
         tenant());
+  }
+
+  private List<Map<String, Object>> lower(List<Map<String, Object>> rows) {
+    List<Map<String, Object>> result = new ArrayList<>();
+    for (Map<String, Object> row : rows) {
+      Map<String, Object> normalized = new LinkedHashMap<>();
+      row.forEach((key, value) -> normalized.put(key.toLowerCase(Locale.ROOT), value));
+      result.add(normalized);
+    }
+    return result;
   }
 
   public <T> T read(String s, Class<T> type) {

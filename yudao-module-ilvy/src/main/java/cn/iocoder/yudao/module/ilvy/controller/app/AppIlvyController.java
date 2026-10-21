@@ -42,6 +42,16 @@ public class AppIlvyController {
             : service.search(q));
   }
 
+  @org.springframework.beans.factory.annotation.Autowired
+  private cn.iocoder.yudao.module.ilvy.dal.IlvyCatalogRepository catalog;
+
+  @GetMapping("/places/page")
+  @PermitAll
+  public CommonResult<Map<String, Object>> page(@Valid PageQuery q) {
+    return CommonResult.success(
+        catalog.page(q, Boolean.TRUE.equals(q.getFavoriteOnly()) ? user() : null));
+  }
+
   @GetMapping("/places/{id}")
   @PermitAll
   public CommonResult<JsonNode> place(@PathVariable String id) {

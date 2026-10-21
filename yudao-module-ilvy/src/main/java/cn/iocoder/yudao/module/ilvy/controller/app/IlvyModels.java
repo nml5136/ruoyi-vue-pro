@@ -46,6 +46,24 @@ public class IlvyModels {
   }
 
   @Data
+  @lombok.EqualsAndHashCode(callSuper = true)
+  public static class PageQuery extends Query {
+    @Min(1)
+    @Max(10000)
+    private int pageNo = 1;
+
+    @Min(1)
+    @Max(50)
+    private int pageSize = 20;
+
+    @Min(0)
+    private Long catalogVersion;
+
+    @Min(0)
+    private Long userVersion;
+  }
+
+  @Data
   @lombok.experimental.Accessors(chain = true)
   public static class CatalogCollection {
     private String id,
@@ -165,6 +183,7 @@ public class IlvyModels {
   @Data
   @lombok.experimental.Accessors(chain = true)
   public static class EvidenceRecord {
+    private boolean deleted;
     private String id, contentType, filePath, feedbackId;
     private long size;
   }

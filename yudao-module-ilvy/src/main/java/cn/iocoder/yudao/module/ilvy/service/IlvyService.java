@@ -182,10 +182,9 @@ public class IlvyService {
   }
 
   public JsonNode place(String id) {
-    return repo.places().stream()
-        .filter(p -> p.path("id").asText().equals(id))
-        .findFirst()
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "地点不存在"));
+    JsonNode row = repo.place(id);
+    if (row == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "地点不存在");
+    return row;
   }
 
   public State state(long user) {

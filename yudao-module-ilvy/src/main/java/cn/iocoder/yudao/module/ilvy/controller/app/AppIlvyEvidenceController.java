@@ -54,6 +54,22 @@ public class AppIlvyEvidenceController {
         .body(service.bytes(user, id));
   }
 
+  @GetMapping("/expired")
+  public CommonResult<List<Map<String, Object>>> expired() {
+    return CommonResult.success(service.expired(user()));
+  }
+
+  @PostMapping("/expired/discard")
+  public CommonResult<Integer> discard(@RequestBody List<String> ids) {
+    return CommonResult.success(service.discardExpired(user(), ids));
+  }
+
+  @DeleteMapping("/{id}/feedback/{feedbackId}")
+  public CommonResult<Boolean> detach(@PathVariable String id, @PathVariable String feedbackId) {
+    service.detach(user(), id, feedbackId);
+    return CommonResult.success(true);
+  }
+
   @DeleteMapping("/{id}")
   public CommonResult<Boolean> delete(@PathVariable String id) {
     service.remove(user(), id);

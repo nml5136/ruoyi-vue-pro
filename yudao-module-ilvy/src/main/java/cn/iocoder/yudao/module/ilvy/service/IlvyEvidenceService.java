@@ -138,7 +138,8 @@ public class IlvyEvidenceService {
   public EvidenceRecord get(long user, String id) {
     requireEnabled();
     EvidenceRecord row = repo.evidence(user, id);
-    if (row == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "证据不存在或无权访问");
+    if (row == null || row.isDeleted())
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "证据不存在或无权访问");
     return row;
   }
 
@@ -168,17 +169,95 @@ public class IlvyEvidenceService {
     }
   }
 
+  private EvidenceRecord owned(long user, String id) {
+    requireEnabled();
+    EvidenceRecord row = repo.evidence(user, id);
+    if (row == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "证据不存在或无权访问");
+    return row;
+  }
+
   @Transactional
   public void remove(long user, String id) {
-    EvidenceRecord row = get(user, id);
+    EvidenceRecord row = owned(user, id);
     if (row.getFeedbackId() != null)
-      throw new ResponseStatusException(HttpStatus.CONFLICT, "已提交的证据保留在反馈记录中");
-    try {
-      if (repo.removeUnsubmittedEvidence(user, id) != 1)
-        throw new ResponseStatusException(HttpStatus.CONFLICT, "证据状态已变化，请刷新");
-      Files.deleteIfExists(checkedPath(row));
-    } catch (IOException e) {
-      throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "图片未移除，请重试");
+      throw new ResponseStatusException(HttpStatus.CONFLICT, "已提交的证据请从反馈记录中移除引用");
+    if (row.isDeleted()) return;
+    if (repo.removeUnsubmittedEvidence(user, id) != 1)
+      throw new ResponseStatusException(HttpStatus.CONFLICT, "证据状态已变化，请刷新");
+  }
+
+  @Transactional
+  public void detach(long user, String id, String feedback) {
+    EvidenceRecord row = owned(user, id);
+    if (!Objects.equals(row.getFeedbackId(), feedback))
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "反馈附件不存在或无权访问");
+    if (row.isDeleted()) return;
+    if (repo.detachEvidence(user, id, feedback) != 1)
+      throw new ResponseStatusException(HttpStatus.CONFLICT, "附件状态已变化，请刷新");
+  }
+
+  public List<Map<String, Object>> expired(long user) {
+    requireEnabled();
+    return repo.expiredEvidence(user);
+  }
+
+  @Transactional
+  public int discardExpired(long user, List<String> ids) {
+    if (ids == null || ids.size() > 50 || new HashSet<>(ids).size() != ids.size())
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "请选择不超过50个不同的过期图片");
+    int changed = 0;
+    for (String id : ids) {
+      EvidenceRecord row = owned(user, id);
+      if (row.isDeleted()) continue;
+      if (repo.expireEvidence(user, id) != 1)
+        throw new ResponseStatusException(HttpStatus.CONFLICT, "图片未过期或已关联反馈，请刷新清理预览");
+      changed++;
     }
+    return changed;
+  }
+
+  // No public endpoint or automatic schedule. Preview by default; irreversible purge is
+  // operator-gated.
+  @Value("${ilvy.evidence-purge-enabled:false}")
+  private boolean purgeEnabled;
+
+  public List<Map<String, Object>> retention(boolean apply, int limit) {
+    requireEnabled();
+    if (limit < 1 || limit > 50) throw new IllegalArgumentException("Bounded batch required");
+    if (apply && !purgeEnabled)
+      throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "物理清理未启用");
+    List<Map<String, Object>> result = new ArrayList<>();
+    for (Map<String, Object> candidate : repo.purgeCandidates(limit)) {
+      String id = (String) candidate.get("id");
+      Map<String, Object> item = new LinkedHashMap<>();
+      item.put("id", id);
+      item.put("status", "eligible");
+      if (apply) {
+        try {
+          Path path = Paths.get((String) candidate.get("file_path")).toAbsolutePath().normalize();
+          if (!path.startsWith(root)
+              || path.getNameCount() != root.getNameCount() + 2
+              || !(path.getFileName().toString().equals(id + ".png")
+                  || path.getFileName().toString().equals(id + ".jpg")))
+            throw new IOException("Invalid evidence path");
+          for (Path check = path;
+              check != null && check.startsWith(root);
+              check = check.getParent())
+            if (Files.isSymbolicLink(check))
+              throw new IOException("Symbolic evidence path rejected");
+          if (Files.exists(path, LinkOption.NOFOLLOW_LINKS)
+              && !Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS))
+            throw new IOException("Evidence is not a regular file");
+          Files.deleteIfExists(path);
+          repo.recordPurge(id, null);
+          item.put("status", "purged");
+        } catch (Exception e) {
+          repo.recordPurge(id, "IO_OR_METADATA_FAILURE");
+          item.put("status", "retry");
+        }
+      }
+      result.add(item);
+    }
+    return result;
   }
 }

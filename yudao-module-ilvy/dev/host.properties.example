@@ -55,3 +55,7 @@ yudao.codegen.import-enable=false
 # ilvy.evidence-directory=/workspace/tools/ilvy-evidence
 # spring.servlet.multipart.max-file-size=3MB
 # spring.servlet.multipart.max-request-size=4MB
+# Rebuild derived local catalog indexes after applying V5; no external data import.
+# ilvy.catalog-reindex=true
+# Physical retention is disabled by default. Do not enable for real user data here.
+# ilvy.evidence-purge-enabled=false

@@ -69,3 +69,49 @@ history. This does not send feedback to a destination/operator, approve source f
 or establish media publication rights. Browser/process termination before submission
 may leave private unsubmitted files; lifecycle cleanup/production storage is still pending.
 Never copy this directory, generated credentials or database dumps into reports.
+
+### Versioned catalog pages and evidence retention (V5/V6)
+
+Apply V5 and V6 after V4 to the isolated database. Enable
+`ilvy.catalog-reindex=true` only for an explicit derived-index rebuild at startup
+(local profile enables it after its seeder). Full-host local config uses the same
+initializer. It reads local catalog payloads in batches of 200; it does not fetch
+or publish external data. Subsequent internal content writes must use
+`IlvyCatalogRepository.put/remove` so payload, tag/region projection and revision
+change in one transaction. Raw source-table edits bypass this contract.
+
+`GET /places/page` accepts the existing filters plus pageNo (1..10000), pageSize
+(1..50), catalogVersion and, for favoriteOnly, userVersion. Default pageSize=20;
+ID ascending is the stable ordering. Continuation requires the returned revision;
+a catalog or favorite-state change returns 409 and the client refreshes instead of
+merging pages. Each query uses a repeatable-read transaction for revision/count/
+rows. Region, grade and type/theme indexes are present; substring keyword search
+is still LIKE with escaped wildcards, not a full-text index. There is no benchmark
+or claim about nationwide scale/deep-page performance. Legacy list and collection
+aggregation remain for the small initial catalog and existing screens.
+
+V6 changes deletion from immediate physical removal to a tombstone. Owner/tenant
+scope applies to every receipt, expired preview, logical delete and attachment
+reference removal. Unassociated uploads older than 24 hours can be previewed and
+explicitly discarded in batches up to 50. Fresh or submitted images cannot be
+expired through that path. Removing a submitted attachment uses its feedback ID,
+keeps text/history and prevents reattachment. Repeated successful operations are
+idempotent; concurrent association makes a pending delete/expiry fail safely.
+
+`IlvyEvidenceService.retention(false, limit)` previews only tombstones older than
+seven days. The internal apply method is disabled unless the operator explicitly
+sets `ilvy.evidence-purge-enabled=true`; there is no public endpoint and no automatic
+schedule. It checks the dedicated root and symlinks, deletes idempotently, marks
+success only afterward, and records a sanitized retry state on I/O/metadata errors.
+An already missing file is a successful retry. No filesystem paths appear in user
+receipts or retention results. This task does not enable apply on the MySQL host;
+physical apply/failure-retry tests operate only under temporary test directories.
+Production activation, retention policy and storage backup need a separate reviewed
+operational decision; no real user files were purged.
+
+Checks: `IlvyCatalogPageTest` exercises 61 generated test records, stable ordering,
+empty pages, bound validation, filter parity, concurrent insert/update/delete and
+private favorite version changes. `IlvyEvidenceApiTest` covers expiry ownership,
+fresh/uploaded distinctions, reference removal, tombstone retention, disabled apply
+and physical failure retry. Run `dev/verify-page.py --report <local-report-path>`
+for read-only filter parity against the isolated full host's MySQL pages.
