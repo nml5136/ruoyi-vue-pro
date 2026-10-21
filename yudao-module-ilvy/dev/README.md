@@ -53,3 +53,19 @@ ILVY_E2E_MODE=member ILVY_E2E_RESET=1 ILVY_E2E_CREDENTIALS=/workspace/tools/ilvy
 RESET 只允许已声明的隔离测试账号 900002，通过真实 API 初始化该账号的收藏/计划/偏好，保留反馈历史。不可对真实用户运行。微信构建使用相同三个构建变量；localhost 产物尚未经过开发者工具/真机验证。
 
 验收证据见 `../docs/完整宿主接口验收.json`、前端 `ilvy/docs/宿主浏览器验收.json` 和第二阶段报告。真实景点、微信/地图/天气/媒体/支付等外部能力、完整会员业务覆盖及生产迁移仍未完成。
+
+### Private correction evidence (V4)
+
+Implements product section 12.4 optional evidence attachments, not a crawler/importer.
+Apply `V4__ilvy_private_evidence.sql` to the isolated development database before running
+this version of the full host. Configure `ilvy.evidence-directory` to a dedicated
+absolute directory named `ilvy-evidence*`; absent configuration reports disabled.
+For local integration use `/workspace/tools/ilvy-evidence`, outside source/web roots.
+Set multipart max-file-size to 3MB and max-request-size to 4MB; the service enforces
+2 MiB PNG/JPEG with magic/header/dimension checks. At most three image IDs per feedback.
+Files and metadata are scoped by tenant + member ID, never publicly served.
+Only unsubmitted images can be deleted; submitted images remain in private feedback
+history. This does not send feedback to a destination/operator, approve source facts,
+or establish media publication rights. Browser/process termination before submission
+may leave private unsubmitted files; lifecycle cleanup/production storage is still pending.
+Never copy this directory, generated credentials or database dumps into reports.

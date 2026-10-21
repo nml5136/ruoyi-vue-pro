@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/ilvy")
 public class AppIlvyController {
   private final IlvyService service;
+  private final cn.iocoder.yudao.module.ilvy.service.IlvyEvidenceService evidence;
 
-  public AppIlvyController(IlvyService service) {
+  public AppIlvyController(
+      IlvyService service, cn.iocoder.yudao.module.ilvy.service.IlvyEvidenceService evidence) {
+    this.evidence = evidence;
     this.service = service;
   }
 
@@ -57,7 +60,20 @@ public class AppIlvyController {
     Map<String, Object> c = new HashMap<>();
     for (String k : Arrays.asList("map", "weather", "panorama", "payment", "wechat"))
       c.put(k, false);
+    c.put("evidence", evidence.enabled());
     return CommonResult.success(c);
+  }
+
+  @GetMapping("/me")
+  @PreAuthorize("isAuthenticated()")
+  public CommonResult<Map<String, String>> me() {
+    long id = user();
+    cn.iocoder.yudao.framework.security.core.LoginUser u = SecurityFrameworkUtils.getLoginUser();
+    if (u.getTenantId() == null || !Integer.valueOf(1).equals(u.getUserType()))
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.UNAUTHORIZED, "需要会员身份");
+    return CommonResult.success(
+        Collections.singletonMap("ownerKey", u.getTenantId() + ":member:" + id));
   }
 
   @GetMapping("/state")

@@ -50,3 +50,8 @@ yudao.codegen.vo-type=10
 yudao.codegen.delete-batch-enable=false
 yudao.codegen.unit-test-enable=false
 yudao.codegen.import-enable=false
+
+# Optional private correction images; keep outside source and public web roots.
+# ilvy.evidence-directory=/workspace/tools/ilvy-evidence
+# spring.servlet.multipart.max-file-size=3MB
+# spring.servlet.multipart.max-request-size=4MB

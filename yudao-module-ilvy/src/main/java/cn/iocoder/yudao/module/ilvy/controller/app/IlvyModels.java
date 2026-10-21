@@ -155,5 +155,17 @@ public class IlvyModels {
     @NotBlank
     @Size(max = 2000)
     private String description;
+
+    @NotNull
+    @Size(max = 3)
+    private List<@NotBlank @Pattern(regexp = "[0-9a-f-]{36}") String> evidenceIds =
+        new ArrayList<>();
+  }
+
+  @Data
+  @lombok.experimental.Accessors(chain = true)
+  public static class EvidenceRecord {
+    private String id, contentType, filePath, feedbackId;
+    private long size;
   }
 }

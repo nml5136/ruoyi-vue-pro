@@ -230,10 +230,16 @@ public class IlvyService {
     return s;
   }
 
+  @Transactional
   public Map<String, String> feedback(long user, Feedback f) {
     place(f.getPlaceId());
     String id = UUID.randomUUID().toString();
+    if (new HashSet<>(f.getEvidenceIds()).size() != f.getEvidenceIds().size())
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "证据图片重复");
     repo.feedback(user, id, f.getPlaceId(), f.getCategory(), f.getDescription());
+    for (String evidence : f.getEvidenceIds())
+      if (repo.linkEvidence(user, evidence, id) != 1)
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "证据不存在、已提交或不属于当前会员");
     Map<String, String> r = new HashMap<>();
     r.put("id", id);
     r.put("status", "待核实");
@@ -241,6 +247,9 @@ public class IlvyService {
   }
 
   public List<Map<String, Object>> feedback(long user) {
-    return repo.feedback(user);
+    List<Map<String, Object>> rows = repo.feedback(user);
+    for (Map<String, Object> row : rows)
+      row.put("evidence_ids", repo.evidenceIds(user, String.valueOf(row.get("id"))));
+    return rows;
   }
 }

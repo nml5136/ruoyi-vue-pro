@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.ilvy.dal;
 
+import cn.iocoder.yudao.module.ilvy.controller.app.IlvyModels.EvidenceRecord;
 import cn.iocoder.yudao.module.ilvy.controller.app.IlvyModels.State;
 import com.fasterxml.jackson.databind.*;
 import java.util.*;
@@ -80,6 +81,76 @@ public class IlvyRepository {
     return jdbc.queryForList(
         "SELECT id,place_id,category,description,status,created_at FROM ilvy_feedback WHERE"
             + " user_id=? AND tenant_id=? AND user_type=1 ORDER BY created_at DESC",
+        user,
+        tenant());
+  }
+
+  public void assertOwner(long user) {
+    cn.iocoder.yudao.framework.security.core.LoginUser u =
+        cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUser();
+    if (u == null || !java.util.Objects.equals(u.getId(), user))
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.UNAUTHORIZED, "请先登录");
+    tenant();
+  }
+
+  public void addEvidence(long user, EvidenceRecord row, String hash) {
+    jdbc.update(
+        "INSERT INTO"
+            + " ilvy_feedback_evidence(id,user_id,tenant_id,user_type,content_type,file_path,file_size,sha256)"
+            + " VALUES (?,?,?,1,?,?,?,?)",
+        row.getId(),
+        user,
+        tenant(),
+        row.getContentType(),
+        row.getFilePath(),
+        row.getSize(),
+        hash);
+  }
+
+  public EvidenceRecord evidence(long user, String id) {
+    List<EvidenceRecord> rows =
+        jdbc.query(
+            "SELECT id,content_type,file_path,file_size,feedback_id FROM ilvy_feedback_evidence"
+                + " WHERE id=? AND user_id=? AND tenant_id=? AND user_type=1",
+            (rs, n) ->
+                new EvidenceRecord()
+                    .setId(rs.getString("id"))
+                    .setContentType(rs.getString("content_type"))
+                    .setFilePath(rs.getString("file_path"))
+                    .setSize(rs.getLong("file_size"))
+                    .setFeedbackId(rs.getString("feedback_id")),
+            id,
+            user,
+            tenant());
+    return rows.isEmpty() ? null : rows.get(0);
+  }
+
+  public int linkEvidence(long user, String id, String feedback) {
+    return jdbc.update(
+        "UPDATE ilvy_feedback_evidence SET feedback_id=? WHERE id=? AND user_id=? AND tenant_id=?"
+            + " AND user_type=1 AND feedback_id IS NULL",
+        feedback,
+        id,
+        user,
+        tenant());
+  }
+
+  public int removeUnsubmittedEvidence(long user, String id) {
+    return jdbc.update(
+        "DELETE FROM ilvy_feedback_evidence WHERE id=? AND user_id=? AND tenant_id=? AND"
+            + " user_type=1 AND feedback_id IS NULL",
+        id,
+        user,
+        tenant());
+  }
+
+  public List<String> evidenceIds(long user, String feedback) {
+    return jdbc.query(
+        "SELECT id FROM ilvy_feedback_evidence WHERE feedback_id=? AND user_id=? AND tenant_id=?"
+            + " AND user_type=1 ORDER BY created_at,id",
+        (rs, n) -> rs.getString(1),
+        feedback,
         user,
         tenant());
   }
