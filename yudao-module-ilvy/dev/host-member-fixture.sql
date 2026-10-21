@@ -1,0 +1,182 @@
+-- LOCAL DEVELOPMENT FIXTURE ONLY. Generated from member DO fields; not a production migration.
+
+CREATE TABLE IF NOT EXISTS `member_address` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `user_id` BIGINT NULL,
+  `name` TEXT NULL,
+  `mobile` TEXT NULL,
+  `area_id` BIGINT NULL,
+  `detail_address` TEXT NULL,
+  `default_status` BIT(1) NULL,
+  `tenant_id` BIGINT NOT NULL DEFAULT 0,
+  `creator` VARCHAR(64) NULL,
+  `updater` VARCHAR(64) NULL,
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted` BIT(1) NOT NULL DEFAULT b'0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `member_config` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `point_trade_deduct_enable` BIT(1) NULL,
+  `point_trade_deduct_unit_price` INT NULL,
+  `point_trade_deduct_max_price` INT NULL,
+  `point_trade_give_point` INT NULL,
+  `tenant_id` BIGINT NOT NULL DEFAULT 0,
+  `creator` VARCHAR(64) NULL,
+  `updater` VARCHAR(64) NULL,
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted` BIT(1) NOT NULL DEFAULT b'0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `member_group` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` TEXT NULL,
+  `remark` TEXT NULL,
+  `status` INT NULL,
+  `tenant_id` BIGINT NOT NULL DEFAULT 0,
+  `creator` VARCHAR(64) NULL,
+  `updater` VARCHAR(64) NULL,
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted` BIT(1) NOT NULL DEFAULT b'0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `member_experience_record` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `user_id` BIGINT NULL,
+  `biz_type` INT NULL,
+  `biz_id` TEXT NULL,
+  `title` TEXT NULL,
+  `description` TEXT NULL,
+  `experience` INT NULL,
+  `total_experience` INT NULL,
+  `tenant_id` BIGINT NOT NULL DEFAULT 0,
+  `creator` VARCHAR(64) NULL,
+  `updater` VARCHAR(64) NULL,
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted` BIT(1) NOT NULL DEFAULT b'0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `member_level` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` TEXT NULL,
+  `level` INT NULL,
+  `experience` INT NULL,
+  `discount_percent` INT NULL,
+  `icon` TEXT NULL,
+  `background_url` TEXT NULL,
+  `status` INT NULL,
+  `tenant_id` BIGINT NOT NULL DEFAULT 0,
+  `creator` VARCHAR(64) NULL,
+  `updater` VARCHAR(64) NULL,
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted` BIT(1) NOT NULL DEFAULT b'0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `member_level_record` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `user_id` BIGINT NULL,
+  `level_id` BIGINT NULL,
+  `level` INT NULL,
+  `discount_percent` INT NULL,
+  `experience` INT NULL,
+  `user_experience` INT NULL,
+  `remark` TEXT NULL,
+  `description` TEXT NULL,
+  `tenant_id` BIGINT NOT NULL DEFAULT 0,
+  `creator` VARCHAR(64) NULL,
+  `updater` VARCHAR(64) NULL,
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted` BIT(1) NOT NULL DEFAULT b'0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `member_point_record` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `user_id` BIGINT NULL,
+  `biz_id` TEXT NULL,
+  `biz_type` INT NULL,
+  `title` TEXT NULL,
+  `description` TEXT NULL,
+  `point` INT NULL,
+  `total_point` INT NULL,
+  `tenant_id` BIGINT NOT NULL DEFAULT 0,
+  `creator` VARCHAR(64) NULL,
+  `updater` VARCHAR(64) NULL,
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted` BIT(1) NOT NULL DEFAULT b'0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `member_sign_in_config` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `day` INT NULL,
+  `point` INT NULL,
+  `experience` INT NULL,
+  `status` INT NULL,
+  `tenant_id` BIGINT NOT NULL DEFAULT 0,
+  `creator` VARCHAR(64) NULL,
+  `updater` VARCHAR(64) NULL,
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted` BIT(1) NOT NULL DEFAULT b'0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `member_sign_in_record` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `user_id` BIGINT NULL,
+  `day` INT NULL,
+  `point` INT NULL,
+  `experience` INT NULL,
+  `tenant_id` BIGINT NOT NULL DEFAULT 0,
+  `creator` VARCHAR(64) NULL,
+  `updater` VARCHAR(64) NULL,
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted` BIT(1) NOT NULL DEFAULT b'0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `member_tag` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` TEXT NULL,
+  `tenant_id` BIGINT NOT NULL DEFAULT 0,
+  `creator` VARCHAR(64) NULL,
+  `updater` VARCHAR(64) NULL,
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted` BIT(1) NOT NULL DEFAULT b'0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `member_user` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `mobile` TEXT NULL,
+  `email` TEXT NULL,
+  `password` TEXT NULL,
+  `status` INT NULL,
+  `register_ip` TEXT NULL,
+  `register_terminal` INT NULL,
+  `login_ip` TEXT NULL,
+  `login_date` DATETIME NULL,
+  `nickname` TEXT NULL,
+  `avatar` TEXT NULL,
+  `name` TEXT NULL,
+  `sex` INT NULL,
+  `birthday` DATETIME NULL,
+  `area_id` INT NULL,
+  `mark` TEXT NULL,
+  `point` INT NULL,
+  `tag_ids` TEXT NULL,
+  `level_id` BIGINT NULL,
+  `experience` INT NULL,
+  `group_id` BIGINT NULL,
+  `tenant_id` BIGINT NOT NULL DEFAULT 0,
+  `creator` VARCHAR(64) NULL,
+  `updater` VARCHAR(64) NULL,
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted` BIT(1) NOT NULL DEFAULT b'0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

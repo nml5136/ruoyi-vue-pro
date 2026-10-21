@@ -21,6 +21,7 @@
     <url>https://github.com/YunaiV/ruoyi-vue-pro</url>
 
     <dependencies>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-test</artifactId><scope>test</scope></dependency>
         <dependency>
             <groupId>cn.iocoder.boot</groupId>
             <artifactId>yudao-module-system</artifactId>
@@ -171,4 +172,11 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile><id>ilvy-dev-host</id><dependencies>
+            <dependency><groupId>org.apache.httpcomponents</groupId><artifactId>httpclient</artifactId></dependency>
+            <dependency><groupId>cn.iocoder.boot</groupId><artifactId>yudao-module-ilvy</artifactId><version>${revision}</version></dependency>
+            <dependency><groupId>cn.iocoder.boot</groupId><artifactId>yudao-module-member</artifactId><version>${revision}</version></dependency>
+        </dependencies></profile>
+    </profiles>
 </project>

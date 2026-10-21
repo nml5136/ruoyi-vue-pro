@@ -158,4 +158,7 @@
         </repository>
     </repositories>
 
+    <profiles>
+        <profile><id>ilvy-dev-host</id><modules><module>yudao-module-member</module></modules></profile>
+    </profiles>
 </project>

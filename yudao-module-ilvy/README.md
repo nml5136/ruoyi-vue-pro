@@ -1,4 +1,8 @@
-# ilvy 旅游业务模块：本地闭环阶段
+# ilvy 旅游业务模块
+
+最新进展：完整 `YudaoServerApplication` + 隔离 MySQL/Redis + 现有会员密码/OAuth2 集成已验收；见 [完整宿主开发说明](dev/README.md)。下面保留独立 H2 启动器的第一阶段说明，不能将其与宿主运行环境混淆。
+
+## 第一阶段独立本地闭环
 
 独立模块位于 ruoyi-vue-pro 的 `ilvy-dev` 分支，遵循 controller / service / dal 分层，复用芋道 `CommonResult`、`LoginUser`、`SecurityFrameworkUtils`，使用 Spring JDBC/事务与输入校验。
 

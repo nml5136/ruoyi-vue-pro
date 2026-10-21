@@ -1,1 +1,6 @@
 .local/
+__pycache__/
+.dev-runtime/
+dev/*.local.properties
+dev/*credentials*.json
+dev/*members*.json

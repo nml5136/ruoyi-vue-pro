@@ -1,0 +1,37 @@
+{
+  "startupClass": "cn.iocoder.yudao.server.YudaoServerApplication",
+  "hostPort": 48082,
+  "mysqlPort": 43306,
+  "redisPort": 46379,
+  "identity": "existing member password authentication and OAuth2 service, no mock login",
+  "passed": [
+    "member 1 real password login",
+    "member 2 real password login",
+    "anonymous state access denied",
+    "public catalog is read from MySQL",
+    "member has readable private state",
+    "member state saves through actual host",
+    "state readback preserves group and note",
+    "second member cannot read first member state",
+    "optimistic conflict uses correct API error",
+    "forged tenant header is denied",
+    "feedback stored by real host",
+    "feedback is private to member",
+    "development anonymous-session endpoint unavailable in full host",
+    "existing member logout succeeds",
+    "revoked OAuth2 token cannot read private state"
+  ],
+  "jarStartClass": "cn.iocoder.yudao.server.YudaoServerApplication",
+  "includedBusinessModules": [
+    "BOOT-INF/lib/yudao-module-system-2026.06-jdk8-SNAPSHOT.jar",
+    "BOOT-INF/lib/yudao-module-infra-2026.06-jdk8-SNAPSHOT.jar",
+    "BOOT-INF/lib/yudao-module-ilvy-2026.06-jdk8-SNAPSHOT.jar",
+    "BOOT-INF/lib/yudao-module-member-2026.06-jdk8-SNAPSHOT.jar"
+  ],
+  "recordedAt": "2026-10-21T04:17:06.726962+00:00",
+  "jarSha256": "025684fa54089a799b0e163c1f5bfc5fa3e62fdd92c14b71c399cbd697509031",
+  "databaseVersion": "MySQL 8.0.43",
+  "databaseEngine": "InnoDB",
+  "redisVersion": "7.4.6",
+  "mockLogin": false
+}
