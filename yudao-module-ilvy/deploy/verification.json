@@ -1,0 +1,66 @@
+{
+  "time": "2026-10-21T08:22:02.239075+00:00",
+  "businessBaselineCommit": "a01f3d8591a0064ba57001383a4d63cabfe3ee83",
+  "mavenVerify": "passed",
+  "tests": [
+    {
+      "class": "IlvyApiTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "IlvyFilterTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "IlvyTenantTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "IlvyEvidenceApiTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "IlvyCatalogPageTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "IlvyHostConfigurationTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "totalTests": 34,
+  "deploymentChecks": [
+    "bash syntax: run-test.sh and init-empty-test-db.sh",
+    "Python smoke syntax compilation",
+    "Docker Compose v2 configuration rendering with placeholders only",
+    "mocked empty DB initialization: 17 calls, no database touched",
+    "mocked nonempty DB refuses before import",
+    "missing explicit init approval refuses before Docker call",
+    "run-test.sh --check input validation, no service started"
+  ],
+  "notExecuted": [
+    "Docker compose up",
+    "real initialization script",
+    "remote deployment",
+    "creation of credentials or member accounts"
+  ],
+  "remoteGrokRequired": true
+}

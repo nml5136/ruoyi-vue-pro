@@ -1,0 +1,29 @@
+# Isolated test services only. Never reuse production volumes or expose these ports.
+services:
+  mysql:
+    image: mysql:8.0.43
+    environment:
+      MYSQL_DATABASE: ilvy_dev
+      MYSQL_USER: ilvy_dev
+      MYSQL_PASSWORD: ${ILVY_DB_PASSWORD:?Supply an approved local test secret}
+      MYSQL_ROOT_PASSWORD: ${ILVY_MYSQL_ROOT_PASSWORD:?Supply an approved local test secret}
+    ports: ["127.0.0.1:43306:3306"]
+    volumes: ["mysql-data:/var/lib/mysql"]
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=\"$$MYSQL_ROOT_PASSWORD\" mysqladmin ping -h 127.0.0.1 -uroot --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+  redis:
+    image: redis:7.4.6
+    command: ["redis-server", "--appendonly", "yes"]
+    ports: ["127.0.0.1:46379:6379"]
+    volumes: ["redis-data:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+volumes:
+  mysql-data:
+  redis-data:

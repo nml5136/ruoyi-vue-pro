@@ -1,0 +1,6 @@
+.env
+.env.*
+private.env
+runtime/
+*.log
+__pycache__/

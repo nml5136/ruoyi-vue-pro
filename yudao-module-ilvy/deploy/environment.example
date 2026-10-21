@@ -1,0 +1,8 @@
+# Names only: replace placeholders locally using approved secret management.
+# Never commit the real environment file or copy cloud task credentials.
+ILVY_DB_PASSWORD=SET_LOCALLY
+ILVY_MYSQL_ROOT_PASSWORD=SET_LOCALLY
+ILVY_TEST_DATA_DIR=/srv/ilvy-test-data
+# Optional existing approved member for read-only authentication smoke:
+# ILVY_SMOKE_MOBILE=SET_LOCALLY
+# ILVY_SMOKE_PASSWORD=SET_LOCALLY
