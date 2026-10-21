@@ -1,0 +1,472 @@
+[
+  {
+    "id": "timber-hall",
+    "name": "木构学堂（演示）",
+    "province": "陕西",
+    "city": "西安",
+    "district": "碑林区",
+    "type": "古建筑",
+    "template": "culture",
+    "themes": [
+      "古建",
+      "亲子"
+    ],
+    "level": "待核实",
+    "demo": true,
+    "summary": "本地开发用的虚构地点，用于验证交互，不提供实际出游依据。",
+    "tagline": "从一处屋檐，读懂木构的秩序",
+    "stayTime": "建议停留时间待核实",
+    "source": "本地开发测试样本；无真实景区数据背书",
+    "verifiedAt": null,
+    "status": {
+      "label": "演示场景 · 开放状态待核实",
+      "tone": "unknown"
+    },
+    "facilities": [
+      {
+        "label": "推车通行",
+        "state": "待核实"
+      },
+      {
+        "label": "卫生间",
+        "state": "待核实"
+      },
+      {
+        "label": "母婴设施",
+        "state": "待核实"
+      },
+      {
+        "label": "淋浴",
+        "state": "无"
+      }
+    ],
+    "parking": [
+      {
+        "name": "演示停车入口",
+        "walk": "到检票口距离待核实",
+        "fee": "停车费用待核实",
+        "note": "无核实坐标，不提供实际导航"
+      }
+    ],
+    "fees": [
+      {
+        "label": "门票/入场",
+        "price": "待核实",
+        "note": "以实际服务方核实信息为准"
+      }
+    ],
+    "booking": {
+      "needed": null,
+      "channel": "未配置预约服务方",
+      "note": "没有真实预约或支付能力"
+    },
+    "contacts": [],
+    "playSteps": [
+      {
+        "title": "到达与确认",
+        "desc": "出发前核实开放、停车和预约条件"
+      },
+      {
+        "title": "慢慢探索",
+        "desc": "按自身情况安排休息，不预估精准到达时间"
+      }
+    ],
+    "essentials": [
+      {
+        "label": "体力要求",
+        "value": "待核实"
+      }
+    ],
+    "nearby": [],
+    "media": [],
+    "architecture": {
+      "note": "通用木构教学示意，并非实测或特定历史建筑的复原。事实内容待审核。",
+      "hotspots": [
+        {
+          "id": "roof",
+          "no": 1,
+          "name": "屋顶",
+          "x": 50,
+          "y": 20,
+          "short": "观察屋檐轮廓与排水方向",
+          "detail": "本条为教学示意：比较屋顶与柱网的位置关系，不推断具体年代或尺寸。",
+          "look": "退后看整体轮廓，数一数示意图的屋檐层次。"
+        },
+        {
+          "id": "bracket",
+          "no": 2,
+          "name": "斗拱位置",
+          "x": 25,
+          "y": 45,
+          "short": "寻找檐下构件的层次",
+          "detail": "示意位置用于交互验证；具体构件名称和功能须以审核内容为准。",
+          "look": "观察屋檐与柱子之间的过渡。"
+        },
+        {
+          "id": "column",
+          "no": 3,
+          "name": "柱网",
+          "x": 65,
+          "y": 65,
+          "short": "看看柱子如何排列",
+          "detail": "通用木构柱网示意，不代表任何真实建筑的结构参数。",
+          "look": "找出重复出现的柱子与它们之间的间隔。"
+        }
+      ],
+      "tasks": [
+        {
+          "title": "找一找",
+          "desc": "图里有几个编号？将热点与列表对应。"
+        }
+      ],
+      "timeline": [
+        {
+          "title": "内容待审核",
+          "desc": "暂不填入未经核实的年代和修缮记录。"
+        }
+      ]
+    },
+    "family": null,
+    "camp": null,
+    "types": [
+      "古建筑"
+    ],
+    "grade": {
+      "status": "pending",
+      "value": null,
+      "appliesToPlaceId": "timber-hall",
+      "sourceUrl": null,
+      "verifiedAt": null
+    },
+    "heat": null,
+    "sources": [],
+    "review": {
+      "status": "pending",
+      "verifiedAt": null,
+      "expiresAt": null
+    },
+    "coordinates": null
+  },
+  {
+    "id": "forest-park",
+    "name": "森林探索公园（演示）",
+    "province": "广东",
+    "city": "广州",
+    "district": "天河区",
+    "type": "公园",
+    "template": "family",
+    "themes": [
+      "亲子",
+      "自然探索"
+    ],
+    "level": "待核实",
+    "demo": true,
+    "summary": "本地开发用的虚构地点，用于验证交互，不提供实际出游依据。",
+    "tagline": "沿林间小路，寻找孩子眼中的自然",
+    "stayTime": "演示建议：约 3 小时",
+    "source": "本地开发测试样本；无真实景区数据背书",
+    "verifiedAt": null,
+    "status": {
+      "label": "演示场景 · 开放状态待核实",
+      "tone": "unknown"
+    },
+    "facilities": [
+      {
+        "label": "推车通行",
+        "state": "有"
+      },
+      {
+        "label": "卫生间",
+        "state": "有"
+      },
+      {
+        "label": "母婴设施",
+        "state": "待核实"
+      },
+      {
+        "label": "淋浴",
+        "state": "无"
+      }
+    ],
+    "parking": [
+      {
+        "name": "演示停车入口",
+        "walk": "到检票口距离待核实",
+        "fee": "停车费用待核实",
+        "note": "无核实坐标，不提供实际导航"
+      }
+    ],
+    "fees": [
+      {
+        "label": "演示门票",
+        "price": "演示：免费，需预约",
+        "note": "虚构场景测试数据"
+      }
+    ],
+    "booking": {
+      "needed": true,
+      "channel": "演示：免费需预约，未配置实际服务方",
+      "note": "这里只演示预约信息，不产生预约"
+    },
+    "contacts": [],
+    "playSteps": [
+      {
+        "title": "到达与确认",
+        "desc": "出发前核实开放、停车和预约条件"
+      },
+      {
+        "title": "慢慢探索",
+        "desc": "按自身情况安排休息，不预估精准到达时间"
+      }
+    ],
+    "essentials": [
+      {
+        "label": "体力要求",
+        "value": "待核实"
+      }
+    ],
+    "nearby": [],
+    "media": [],
+    "architecture": null,
+    "family": {
+      "age": "演示适龄 3—12 岁",
+      "shade": "演示：林荫步道",
+      "rest": "休息点状态待核实",
+      "rain": "雨天项目待核实"
+    },
+    "camp": null,
+    "feeAmount": 0,
+    "ageMin": 3,
+    "ageMax": 12,
+    "stayHours": 3,
+    "types": [
+      "公园"
+    ],
+    "grade": {
+      "status": "pending",
+      "value": null,
+      "appliesToPlaceId": "forest-park",
+      "sourceUrl": null,
+      "verifiedAt": null
+    },
+    "heat": null,
+    "sources": [],
+    "review": {
+      "status": "pending",
+      "verifiedAt": null,
+      "expiresAt": null
+    },
+    "coordinates": null
+  },
+  {
+    "id": "creek-camp",
+    "name": "青禾溪畔营地（演示）",
+    "province": "广东",
+    "city": "广州",
+    "district": "从化区",
+    "type": "营地",
+    "template": "camp",
+    "themes": [
+      "露营",
+      "摄影"
+    ],
+    "level": "待核实",
+    "demo": true,
+    "summary": "本地开发用的虚构地点，用于验证交互，不提供实际出游依据。",
+    "tagline": "在溪畔留一晚，听风穿过树叶",
+    "stayTime": "建议停留时间待核实",
+    "source": "本地开发测试样本；无真实景区数据背书",
+    "verifiedAt": null,
+    "status": {
+      "label": "演示场景 · 开放状态待核实",
+      "tone": "unknown"
+    },
+    "facilities": [
+      {
+        "label": "推车通行",
+        "state": "待核实"
+      },
+      {
+        "label": "卫生间",
+        "state": "有"
+      },
+      {
+        "label": "母婴设施",
+        "state": "待核实"
+      },
+      {
+        "label": "淋浴",
+        "state": "有"
+      }
+    ],
+    "parking": [
+      {
+        "name": "演示停车入口",
+        "walk": "到检票口距离待核实",
+        "fee": "停车费用待核实",
+        "note": "无核实坐标，不提供实际导航"
+      }
+    ],
+    "fees": [
+      {
+        "label": "门票/入场",
+        "price": "待核实",
+        "note": "以实际服务方核实信息为准"
+      }
+    ],
+    "booking": {
+      "needed": null,
+      "channel": "未配置预约服务方",
+      "note": "没有真实预约或支付能力"
+    },
+    "contacts": [],
+    "playSteps": [
+      {
+        "title": "到达与确认",
+        "desc": "出发前核实开放、停车和预约条件"
+      },
+      {
+        "title": "慢慢探索",
+        "desc": "按自身情况安排休息，不预估精准到达时间"
+      }
+    ],
+    "essentials": [
+      {
+        "label": "体力要求",
+        "value": "待核实"
+      }
+    ],
+    "nearby": [],
+    "media": [],
+    "architecture": null,
+    "family": null,
+    "camp": {
+      "overnight": "演示：可过夜，需提前确认",
+      "vehicle": "演示：车辆停指定区域",
+      "fire": "演示：禁止明火",
+      "pet": "宠物政策待核实",
+      "electricity": "演示：部分营位供电",
+      "unit": "费用按营位计，金额待核实"
+    },
+    "types": [
+      "营地"
+    ],
+    "grade": {
+      "status": "pending",
+      "value": null,
+      "appliesToPlaceId": "creek-camp",
+      "sourceUrl": null,
+      "verifiedAt": null
+    },
+    "heat": null,
+    "sources": [],
+    "review": {
+      "status": "pending",
+      "verifiedAt": null,
+      "expiresAt": null
+    },
+    "coordinates": null
+  },
+  {
+    "id": "wind-view",
+    "name": "山风观景点（演示）",
+    "province": "广东",
+    "city": "广州",
+    "district": "白云区",
+    "type": "观景点",
+    "template": "scenic",
+    "themes": [
+      "摄影",
+      "自然探索"
+    ],
+    "level": "待核实",
+    "demo": true,
+    "summary": "本地开发用的虚构地点，用于验证交互，不提供实际出游依据。",
+    "tagline": "留半天，慢慢看一片山色",
+    "stayTime": "建议停留时间待核实",
+    "source": "本地开发测试样本；无真实景区数据背书",
+    "verifiedAt": null,
+    "status": {
+      "label": "演示场景 · 开放状态待核实",
+      "tone": "unknown"
+    },
+    "facilities": [
+      {
+        "label": "推车通行",
+        "state": "待核实"
+      },
+      {
+        "label": "卫生间",
+        "state": "待核实"
+      },
+      {
+        "label": "母婴设施",
+        "state": "待核实"
+      },
+      {
+        "label": "淋浴",
+        "state": "无"
+      }
+    ],
+    "parking": [
+      {
+        "name": "演示停车入口",
+        "walk": "到检票口距离待核实",
+        "fee": "停车费用待核实",
+        "note": "无核实坐标，不提供实际导航"
+      }
+    ],
+    "fees": [
+      {
+        "label": "门票/入场",
+        "price": "待核实",
+        "note": "以实际服务方核实信息为准"
+      }
+    ],
+    "booking": {
+      "needed": null,
+      "channel": "未配置预约服务方",
+      "note": "没有真实预约或支付能力"
+    },
+    "contacts": [],
+    "playSteps": [
+      {
+        "title": "到达与确认",
+        "desc": "出发前核实开放、停车和预约条件"
+      },
+      {
+        "title": "慢慢探索",
+        "desc": "按自身情况安排休息，不预估精准到达时间"
+      }
+    ],
+    "essentials": [
+      {
+        "label": "体力要求",
+        "value": "待核实"
+      }
+    ],
+    "nearby": [],
+    "media": [],
+    "architecture": null,
+    "family": null,
+    "camp": null,
+    "types": [
+      "观景点"
+    ],
+    "grade": {
+      "status": "pending",
+      "value": null,
+      "appliesToPlaceId": "wind-view",
+      "sourceUrl": null,
+      "verifiedAt": null
+    },
+    "heat": null,
+    "sources": [],
+    "review": {
+      "status": "pending",
+      "verifiedAt": null,
+      "expiresAt": null
+    },
+    "coordinates": null
+  }
+]

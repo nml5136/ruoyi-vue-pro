@@ -1,0 +1,26 @@
+[
+  {
+    "name": "cn.iocoder.yudao.module.ilvy.IlvyApiTest",
+    "tests": "6",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "3.495"
+  },
+  {
+    "name": "cn.iocoder.yudao.module.ilvy.IlvyTenantTest",
+    "tests": "2",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.586"
+  },
+  {
+    "name": "cn.iocoder.yudao.module.ilvy.IlvyFilterTest",
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.004"
+  }
+]

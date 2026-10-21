@@ -1,0 +1,1 @@
+-- Catalog data is intentionally empty. Local examples are loaded only by the ilvy-local profile.

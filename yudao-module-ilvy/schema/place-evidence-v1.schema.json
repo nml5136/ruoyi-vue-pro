@@ -1,0 +1,381 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ilvy place evidence handoff v1",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "province",
+    "city",
+    "district",
+    "type",
+    "types",
+    "template",
+    "themes",
+    "level",
+    "demo",
+    "grade",
+    "sources",
+    "review",
+    "coordinates",
+    "media"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "name": {
+      "type": "string"
+    },
+    "province": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "district": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "types": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "themes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "template": {
+      "enum": [
+        "culture",
+        "family",
+        "camp",
+        "scenic"
+      ]
+    },
+    "level": {
+      "enum": [
+        "3A",
+        "4A",
+        "5A",
+        "未评级",
+        "等级不适用",
+        "待核实"
+      ]
+    },
+    "demo": {
+      "type": "boolean"
+    },
+    "grade": {
+      "type": "object",
+      "required": [
+        "status",
+        "value",
+        "appliesToPlaceId",
+        "sourceUrl",
+        "verifiedAt"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "rated",
+            "unrated",
+            "not-applicable",
+            "expired"
+          ]
+        },
+        "value": {
+          "enum": [
+            "3A",
+            "4A",
+            "5A",
+            null
+          ]
+        },
+        "appliesToPlaceId": {
+          "type": "string"
+        },
+        "sourceUrl": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verifiedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "heat": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "required": [
+        "kind",
+        "sourceUrl",
+        "window",
+        "updatedAt",
+        "value"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "editorial",
+            "on-site",
+            "partner",
+            "live-crowd"
+          ]
+        },
+        "sourceUrl": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "window": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "value": {
+          "type": [
+            "number",
+            "string"
+          ]
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "url",
+          "title",
+          "publisher",
+          "retrievedAt",
+          "verification"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string"
+          },
+          "publisher": {
+            "type": "string"
+          },
+          "retrievedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "publishedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "verification": {
+            "enum": [
+              "pending",
+              "verified",
+              "expired",
+              "rejected"
+            ]
+          },
+          "supportsFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "required": [
+        "status",
+        "verifiedAt",
+        "expiresAt"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "verified",
+            "expired",
+            "rejected"
+          ]
+        },
+        "verifiedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "expiresAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "coordinates": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "required": [
+        "latitude",
+        "longitude",
+        "crs",
+        "targetType",
+        "sourceUrl",
+        "verifiedAt",
+        "status"
+      ],
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "crs": {
+          "enum": [
+            "GCJ-02",
+            "WGS84",
+            "BD-09"
+          ]
+        },
+        "targetType": {
+          "enum": [
+            "place-center",
+            "parking",
+            "vehicle-entrance",
+            "pedestrian-entrance"
+          ]
+        },
+        "sourceUrl": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verifiedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "verified",
+            "expired"
+          ]
+        }
+      }
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "url",
+          "title",
+          "kind",
+          "sourceUrl",
+          "owner",
+          "license",
+          "commercialAllowed",
+          "modificationAllowed",
+          "verifiedAt",
+          "status"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "photo",
+              "panorama",
+              "audio",
+              "diagram",
+              "model",
+              "live-video"
+            ]
+          },
+          "sourceUrl": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "commercialAllowed": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "modificationAllowed": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "verifiedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "verified",
+              "expired",
+              "rejected"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
